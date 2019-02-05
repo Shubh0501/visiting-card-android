@@ -1,6 +1,7 @@
 package com.community.jboss.visitingcard.introscreens;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,8 @@ public class SliderActivity extends AppCompatActivity {
     private TextView[] mDots;
     private LinearLayout mDotLayout;
     private android.widget.Button button;
+    private final String PREFS_NAME = "FirstTimeOrNot";
+
 
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -74,8 +77,18 @@ public class SliderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_slider);
 
         //TODO: The Slider should appear only on when the app is launched for the first time. - Add appropriate conditions for that.
-
-
+        //This part of code ensures that the slider appears only when the app is opened for the first time.
+        //It removes the introduction part and goes directly to the Firebase login page.
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        if(!settings.getBoolean("first_time", true)){
+            Intent intent = new Intent(SliderActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else{
+            settings.edit().putBoolean("first_time", false).commit();
+        }
+        //This is the end of condition.
 
         // TODO: Create Introduction slides explaining all the functionalities of the app here.
 
